@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root{
-    /* Modified slightly to 0.9 opacity so background animation is visible */
     --ink: rgba(11, 15, 20, 0.9);
     --ink-deep: rgba(5, 7, 10, 0.9); 
     --panel: #121922;
@@ -20,7 +19,7 @@
     --paper: #ECE7DA;
     --paper-dim: #A1AAB3;
     --radius: 8px;
-    --speed: 1.5s; /* Global Slow Animation Speed */
+    --speed: 1.5s;
     --curve: cubic-bezier(0.2, 1, 0.3, 1);
   }
 
@@ -32,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* --- BACKGROUND CANVAS --- */
   #bgCanvas {
     position: fixed;
     top: 0; left: 0;
@@ -41,30 +39,18 @@
     pointer-events: none;
   }
 
-  /* --- DEFINED ANIMATIONS --- */
   .anim-hidden { opacity: 0; }
-
-  /* 1. Section Titles Slide Left */
   .anim-header { transform: translateX(-50px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
   .anim-header.active { opacity: 1; transform: translateX(0); }
-
-  /* 2. Projects Slide Up */
   .anim-project { transform: translateY(60px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
   .anim-project.active { opacity: 1; transform: translateY(0); }
-
-  /* 3. Experience Slide Right */
   .anim-experience { transform: translateX(50px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
   .anim-experience.active { opacity: 1; transform: translateX(0); }
-
-  /* 4. Certs Pop In */
   .anim-cert { transform: scale(0.8); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
   .anim-cert.active { opacity: 1; transform: scale(1); }
-
-  /* 5. Contact Fade */
   .anim-contact { transition: opacity 2s var(--curve); }
   .anim-contact.active { opacity: 1; }
 
-  /* --- LAYOUT STYLES --- */
   .mono { font-family: 'JetBrains Mono', monospace; }
   .eyebrow { font-size: 11px; color: var(--amber); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;}
   .eyebrow::before { content:''; width: 20px; height: 1px; background: var(--amber); }
@@ -82,14 +68,12 @@
   section { padding: 140px 8vw 100px; border-bottom: 1px solid var(--line); }
   h2 { font-family: 'Fraunces'; font-size: 48px; margin: 0 0 50px; }
 
-  /* DIFFERENT BACKGROUND COLOR FOR START/CONTACT */
   #hero, #contact { background: var(--ink-deep); }
 
-  /* START SECTION (RESTORED STYLE) */
   #hero { min-height: 90vh; display: flex; align-items: center; gap: 50px; }
   .name-block h3 { font-family: ''; font-size: clamp(15px, 8vw, 100px); margin: 0; line-height: 0.8; }
   .name-block h3 span { color: var(--amber); }
-  
+
   .boot-text {  
     font-family: 'JetBrains Mono'; color: var(--cyan); font-size: 13px; 
     margin-bottom: 30px; border-left: 2px solid var(--line); 
@@ -103,7 +87,6 @@
   .image-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: 0.6s ease; }
   @media (hover: hover) { .image-container:hover .img-front { opacity: 0; } }
 
-  /* PROJECTS */
   .project-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   .project-card { 
     background: var(--panel); border: 1px solid var(--line); padding: 35px; border-radius: var(--radius); 
@@ -117,22 +100,119 @@
   .project-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.6s var(--curve), opacity 0.4s ease; }
   .project-card.expanded .project-details { max-height: 1000px; opacity: 1; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--line); }
 
-  /* CONTACT TEXT (BIG ON LAPTOP) */
   .contact-text { font-size: 18px; display: block; text-decoration: none; color: inherit; }
   @media (min-width: 1200px) {
     .contact-text { font-size: 34px; font-weight: 600; }
   }
 
-  /* MOBILE IMAGE SIZE (SMALLER) */
   @media (max-width: 900px) {
     .nav-links { display: none; }
     #hero { flex-direction: column-reverse; padding-top: 100px; }
     .image-container { width: 110px; height: 150px; } 
     .name-block h1 { font-size: 70px; }
   }
+
+  /* --- EDUCATION STACK/ACCORDION (was missing) --- */
+  .corner-mark{
+    position: absolute;
+    top: 24px;
+    right: 8vw;
+    font-size: 11px;
+    color: var(--paper-dim);
+    letter-spacing: 0.1em;
+  }
+  #education{ position: relative; }
+
+  .stack{
+    max-width: 900px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .layer{
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+  }
+  .layer:last-child{ border-bottom: none; }
+
+  .layer-head{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 26px;
+    background: none;
+    border: none;
+    color: var(--paper);
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .layer-head:hover, .layer-head:focus-visible{ background: rgba(255,255,255,0.02); }
+
+  .layer-num{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--amber);
+    width: 26px;
+    flex-shrink: 0;
+  }
+  .layer-title{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 21px;
+    flex-shrink: 0;
+    min-width: 200px;
+  }
+  .layer-tag{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--paper-dim);
+    flex: 1;
+  }
+  .layer-toggle{
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cyan);
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    transition: transform .25s ease;
+    flex-shrink: 0;
+  }
+  .layer.open .layer-toggle{ transform: rotate(45deg); }
+
+  .layer-body{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .layer.open .layer-body{ max-height: 240px; }
+
+  .layer-body-inner{
+    padding: 0 26px 26px 72px;
+    color: var(--paper-dim);
+    font-size: 15px;
+  }
+  .layer-body-inner p{ margin: 0 0 12px 0; }
+  .chip-row{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 640px){
+    .layer-title{ min-width: unset; font-size: 18px; }
+    .layer-tag{ display: none; }
+    .layer-body-inner{ padding-left: 26px; }
+    .corner-mark{ position: static; display: block; margin-bottom: 12px; }
+  }
 </style>
 </head>
-<body ondblclick="launchReverseStar()">
+<body>
 
 <canvas id="bgCanvas"></canvas>
 
@@ -145,11 +225,9 @@
     <a href="#work">WORK EXPERIENCE</a>
     <a href="#certs">CERTIFICATIONS</a>
     <a href="#contact">CONTACTS</a>
-    
   </div>
 </nav>
 
-<!-- START SECTION (Restored with Typewriter) -->
 <section id="hero">
   <div class="name-block">
     <div class="eyebrow">Unit-13 // Profile</div>
@@ -165,7 +243,6 @@
   </div>
 </section>
 
-<!-- EDUCATION -->
 <section id="education">
   <div class="corner-mark mono">FIG. 01 / RECORD</div>
   <div class="eyebrow">Education</div>
@@ -205,10 +282,27 @@
         </div>
       </div>
     </div>
+
+    <div class="layer" data-layer="edu-3">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-num">03</span>
+        <span class="layer-title">Leadership & Responsibility</span>
+        <span class="layer-tag">Placement Coordinator & Class Representative</span>
+        <span class="layer-toggle">+</span>
+      </button>
+      <div class="layer-body">
+        <div class="layer-body-inner">
+          <p>Serving as Placement Coordinator for the college and Class Representative for the class — coordinating between students, faculty, and placement drives.</p>
+          <div class="chip-row">
+            <span class="chip">Placement Coordinator</span>
+            <span class="chip">Class Representative</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PROJECTS -->
 <section id="projects">
   <div class="anim-hidden anim-header"><div class="eyebrow">Project Modules</div><h2>Projects</h2></div>
   <div class="project-grid">
@@ -224,7 +318,6 @@
       </div>
     </div>
 
-    <!-- Additional Projects following the same pattern -->
     <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">BroCodex — AI Code Optimization</h3>
@@ -271,7 +364,6 @@
   </div>
 </section>
 
-<!-- WORK EXPERIENCE -->
 <section id="work">
   <div class="anim-hidden anim-header"><div class="eyebrow">Experience</div><h2>Work Experience</h2></div>
   <div class="anim-hidden anim-experience" style="border-left: 2px solid var(--line); padding-left: 40px; position:relative;">
@@ -284,7 +376,6 @@
   </div>
 </section>
 
-<!-- CERTIFICATIONS -->
 <section id="certs">
   <div class="anim-hidden anim-header"><div class="eyebrow">Academic</div><h2>Certifications</h2></div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
@@ -299,7 +390,6 @@
   </div>
 </section>
 
-<!-- CONTACTS -->
 <section id="contact">
   <div class="anim-hidden anim-header"><div class="eyebrow">Availability</div><h2>Contacts</h2></div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px;">
@@ -322,7 +412,6 @@
 </section>
 
 <script>
-  // --- SPACE BACKGROUND ENGINE ---
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
@@ -340,17 +429,15 @@
     }
     reset() {
       if (this.isReverse) {
-        // Start from bottom-right area
         this.x = canvas.width + Math.random() * 200;
         this.y = canvas.height + Math.random() * 200;
-        this.vx = - (4 + Math.random() * 6); // Move Left
-        this.vy = - (4 + Math.random() * 6); // Move Up
+        this.vx = - (4 + Math.random() * 6);
+        this.vy = - (4 + Math.random() * 6);
       } else {
-        // Regular star: Start from top-left area
         this.x = Math.random() * canvas.width - 200;
         this.y = Math.random() * -500;
-        this.vx = 2 + Math.random() * 3; // Move Right
-        this.vy = 2 + Math.random() * 3; // Move Down
+        this.vx = 2 + Math.random() * 3;
+        this.vy = 2 + Math.random() * 3;
       }
       this.len = 20 + Math.random() * 40;
       this.opacity = 0.1 + Math.random() * 0.5;
@@ -367,15 +454,66 @@
       this.x += this.vx;
       this.y += this.vy;
       if (this.y > canvas.height + 100 || this.x > canvas.width + 100 || this.x < -100 || this.y < -100) {
-        if (this.isReverse) return false; // Remove reverse stars once off-screen
+        if (this.isReverse) return false;
         this.reset();
       }
       return true;
     }
   }
 
-  // Create initial falling stars
   for(let i=0; i<30; i++) stars.push(new Star());
+
+  // --- ASTEROID BURST (double-tap / double-click) ---
+  let asteroids = [];
+
+  class Asteroid {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      const angle = Math.random() * Math.PI * 2;      // random direction, any way
+      const speed = 6 + Math.random() * 10;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.size = 2 + Math.random() * 3;
+      this.life = 1;
+      this.decay = 0.006 + Math.random() * 0.01;
+      this.color = Math.random() > 0.5 ? '232, 163, 61' : '95, 212, 208'; // amber / cyan
+      this.trail = [];
+    }
+    update() {
+      this.trail.push({ x: this.x, y: this.y });
+      if (this.trail.length > 8) this.trail.shift();
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vx *= 0.99;
+      this.vy *= 0.99;
+      this.life -= this.decay;
+      return this.life > 0;
+    }
+    draw() {
+      // glowing trail
+      for (let i = 0; i < this.trail.length; i++) {
+        const p = this.trail[i];
+        const t = i / this.trail.length;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, this.size * t, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.life * t * 0.5})`;
+        ctx.fill();
+      }
+      // head
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, ${this.life})`;
+      ctx.shadowColor = `rgba(${this.color}, ${this.life})`;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  function launchAsteroids(x, y) {
+    for (let i = 0; i < 18; i++) asteroids.push(new Asteroid(x, y));
+  }
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -383,6 +521,11 @@
     reverseStars = reverseStars.filter(s => {
       let alive = s.update();
       if (alive) s.draw();
+      return alive;
+    });
+    asteroids = asteroids.filter(a => {
+      let alive = a.update();
+      if (alive) a.draw();
       return alive;
     });
     requestAnimationFrame(animate);
@@ -396,7 +539,27 @@
   initCanvas();
   animate();
 
-  // --- EXISTING TYPEWRITER ---
+  // Desktop: double-click launches asteroids from the click point
+  document.body.addEventListener('dblclick', (e) => {
+    launchAsteroids(e.clientX, e.clientY);
+  });
+
+  // Mobile: manual double-tap detection (dblclick is unreliable on touch)
+  let lastTap = 0;
+  let lastTapPos = { x: 0, y: 0 };
+  document.body.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    const touch = e.changedTouches[0];
+    const dist = Math.hypot(touch.clientX - lastTapPos.x, touch.clientY - lastTapPos.y);
+    if (now - lastTap < 300 && dist < 40) {
+      launchAsteroids(touch.clientX, touch.clientY);
+      lastTap = 0;
+    } else {
+      lastTap = now;
+      lastTapPos = { x: touch.clientX, y: touch.clientY };
+    }
+  });
+
   const lines = [
     "> Initialize Karthik_Profile...",
     "> Load Module: AI Systems & Java",
@@ -418,7 +581,6 @@
   }
   type();
 
-  // --- EXISTING SLOW SCROLL ANIMATIONS ---
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, idx) => {
       if (entry.isIntersecting) {
@@ -428,7 +590,6 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.anim-hidden').forEach(el => observer.observe(el));
 
-  // --- EXISTING PROJECT EXPANSION ---
   function expand(el) {
     if(!el.classList.contains('expanded')) {
       document.querySelectorAll('.project-card').forEach(c => c.classList.remove('expanded'));
@@ -436,6 +597,23 @@
     }
   }
   function shrink(el) { el.classList.remove('expanded'); }
+
+  // --- EDUCATION ACCORDION ---
+  document.querySelectorAll('.layer-head').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const layer = btn.closest('.layer');
+      const stack = btn.closest('.stack');
+      const isOpen = layer.classList.contains('open');
+      stack.querySelectorAll('.layer').forEach(l => {
+        l.classList.remove('open');
+        l.querySelector('.layer-head').setAttribute('aria-expanded','false');
+      });
+      if(!isOpen){
+        layer.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
 </script>
 
 </body>
