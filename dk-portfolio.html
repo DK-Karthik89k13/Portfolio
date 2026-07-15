@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karthik P // Unit-13 Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    /* Modified slightly to 0.9 opacity so background animation is visible */
+    --ink: rgba(11, 15, 20, 0.9);
+    --ink-deep: rgba(5, 7, 10, 0.9); 
+    --panel: #121922;
+    --line: #23303D;
+    --amber: #E8A33D;
+    --cyan: #5FD4D0;
+    --paper: #ECE7DA;
+    --paper-dim: #A1AAB3;
+    --radius: 8px;
+    --speed: 1.5s; /* Global Slow Animation Speed */
+    --curve: cubic-bezier(0.2, 1, 0.3, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; background: #05070a; color: var(--paper);
+    font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* --- BACKGROUND CANVAS --- */
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* --- DEFINED ANIMATIONS --- */
+  .anim-hidden { opacity: 0; }
+
+  /* 1. Section Titles Slide Left */
+  .anim-header { transform: translateX(-50px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
+  .anim-header.active { opacity: 1; transform: translateX(0); }
+
+  /* 2. Projects Slide Up */
+  .anim-project { transform: translateY(60px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
+  .anim-project.active { opacity: 1; transform: translateY(0); }
+
+  /* 3. Experience Slide Right */
+  .anim-experience { transform: translateX(50px); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
+  .anim-experience.active { opacity: 1; transform: translateX(0); }
+
+  /* 4. Certs Pop In */
+  .anim-cert { transform: scale(0.8); transition: opacity var(--speed) var(--curve), transform var(--speed) var(--curve); }
+  .anim-cert.active { opacity: 1; transform: scale(1); }
+
+  /* 5. Contact Fade */
+  .anim-contact { transition: opacity 2s var(--curve); }
+  .anim-contact.active { opacity: 1; }
+
+  /* --- LAYOUT STYLES --- */
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .eyebrow { font-size: 11px; color: var(--amber); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;}
+  .eyebrow::before { content:''; width: 20px; height: 1px; background: var(--amber); }
+
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center; padding: 20px 5vw;
+    background: rgba(11, 15, 20, 0.98); border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+  }
+  .nav-links { display: flex; gap: 25px; }
+  .nav-links a { text-decoration: none; color: var(--paper-dim); font-size: 11px; transition: 0.3s; font-weight: 500; }
+  .nav-links a:hover { color: var(--cyan); }
+
+  section { padding: 140px 8vw 100px; border-bottom: 1px solid var(--line); }
+  h2 { font-family: 'Fraunces'; font-size: 48px; margin: 0 0 50px; }
+
+  /* DIFFERENT BACKGROUND COLOR FOR START/CONTACT */
+  #hero, #contact { background: var(--ink-deep); }
+
+  /* START SECTION (RESTORED STYLE) */
+  #hero { min-height: 90vh; display: flex; align-items: center; gap: 50px; }
+  .name-block h3 { font-family: ''; font-size: clamp(15px, 8vw, 100px); margin: 0; line-height: 0.8; }
+  .name-block h3 span { color: var(--amber); }
+  
+  .boot-text {  
+    font-family: 'JetBrains Mono'; color: var(--cyan); font-size: 13px; 
+    margin-bottom: 30px; border-left: 2px solid var(--line); 
+    padding-left: 15px; min-height: 70px; white-space: pre-wrap;
+  }
+
+  .image-container { 
+    width: 240px; height: 320px; border-radius: 12px; overflow: hidden; 
+    border: 1px solid var(--line); flex-shrink: 0; position: relative; background: var(--panel);
+  }
+  .image-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: 0.6s ease; }
+  @media (hover: hover) { .image-container:hover .img-front { opacity: 0; } }
+
+  /* PROJECTS */
+  .project-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .project-card { 
+    background: var(--panel); border: 1px solid var(--line); padding: 35px; border-radius: var(--radius); 
+    cursor: pointer; transition: all 0.4s ease; position: relative;
+  }
+  .project-card:hover { border-color: var(--cyan); }
+  .status-badge { font-family: 'JetBrains Mono'; font-size: 10px; padding: 4px 10px; border-radius: 4px; border: 1px solid; font-weight: bold; margin-left: 10px;}
+  .working { color: var(--amber); border-color: var(--amber); }
+  .completed { color: var(--cyan); border-color: var(--cyan); }
+
+  .project-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.6s var(--curve), opacity 0.4s ease; }
+  .project-card.expanded .project-details { max-height: 1000px; opacity: 1; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--line); }
+
+  /* CONTACT TEXT (BIG ON LAPTOP) */
+  .contact-text { font-size: 18px; display: block; text-decoration: none; color: inherit; }
+  @media (min-width: 1200px) {
+    .contact-text { font-size: 34px; font-weight: 600; }
+  }
+
+  /* MOBILE IMAGE SIZE (SMALLER) */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    #hero { flex-direction: column-reverse; padding-top: 100px; }
+    .image-container { width: 110px; height: 150px; } 
+    .name-block h1 { font-size: 70px; }
+  }
+</style>
+</head>
+<body ondblclick="launchReverseStar()">
+
+<canvas id="bgCanvas"></canvas>
+
+<nav class="mono">
+  <div style="font-weight: bold; letter-spacing: 2px;">KARTHIKEYAN P.</div>
+  <div class="nav-links">
+    <a href="#hero">START</a>
+    <a href="#education">EDUCATION</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#work">WORK EXPERIENCE</a>
+    <a href="#certs">CERTIFICATIONS</a>
+    <a href="#contact">CONTACTS</a>
+    
+  </div>
+</nav>
+
+<!-- START SECTION (Restored with Typewriter) -->
+<section id="hero">
+  <div class="name-block">
+    <div class="eyebrow">Unit-13 // Profile</div>
+    <div class="boot-text" id="typewriter"></div>
+    <h3>KARTHIKEYAN <span>P</span>.</h3>
+    <p style="color: var(--paper-dim); max-width: 550px; font-size: 19px; line-height: 1.6; margin-top: 25px;">
+        >>> Aspiring Software Engineer with a strong foundation in AI/ML and full-stack development, gained through independent projects and a testing internship at an AI evaluation platform. Bringing a builder's mindset, strong fundamentals, and eagerness to learn to a team solving real-world problems.
+    </p>
+  </div>
+  <div class="image-container">
+    <img src="./img/profile.png" class="img-back">
+    <img src="./img/profile.jpg" class="img-front">
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="corner-mark mono">FIG. 01 / RECORD</div>
+  <div class="eyebrow">Education</div>
+  <h2 style="margin-bottom:44px;">Academic record</h2>
+ 
+  <div class="stack">
+    <div class="layer open" data-layer="edu-1">
+      <button class="layer-head" aria-expanded="true">
+        <span class="layer-num">01</span>
+        <span class="layer-title">B.E. Computer Science</span>
+        <span class="layer-tag">Government College of Engineering, Erode — Final Year</span>
+        <span class="layer-toggle">+</span>
+      </button>
+      <div class="layer-body">
+        <div class="layer-body-inner">
+          <p>Core coursework and self-directed projects, currently in final year and preparing for campus placements.</p>
+          <div class="chip-row">
+            <span class="chip">Final Year</span>
+            <span class="chip">B.E. CSE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layer" data-layer="edu-2">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-num">02</span>
+        <span class="layer-title">Diploma</span>
+        <span class="layer-tag">Muthayammal Polytechnic College</span>
+        <span class="layer-toggle">+</span>
+      </button>
+      <div class="layer-body">
+        <div class="layer-body-inner">
+          <p>Foundational technical diploma prior to pursuing the B.E. degree.</p>
+          <div class="chip-row">
+            <span class="chip">Diploma</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="anim-hidden anim-header"><div class="eyebrow">Project Modules</div><h2>Projects</h2></div>
+  <div class="project-grid">
+    
+    <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">KAI — AI Voice Assistant Agent</h3>
+        <div><span class="mono">2026</span><span class="status-badge working">WORKING</span></div>
+      </div>
+      <div class="project-details">
+        <p style="color:var(--paper-dim);">Multi-agent LLM system for consolidated reasoning and local OS automation.</p>
+        <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+      </div>
+    </div>
+
+    <!-- Additional Projects following the same pattern -->
+    <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">BroCodex — AI Code Optimization</h3>
+          <div><span class="mono">2026</span><span class="status-badge completed">COMPLETED</span></div>
+        </div>
+        <div class="project-details">
+          <p style="color:var(--paper-dim);">Autonomous pipeline for code detection, correction, and optimization.</p>
+          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+        </div>
+    </div>
+
+    <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">VendX — AI Price Analysis</h3>
+          <div><span class="mono">2026</span><span class="status-badge completed">COMPLETED</span></div>
+        </div>
+        <div class="project-details">
+          <p style="color:var(--paper-dim);">Python-based scraping and analytics pipeline for market data.</p>
+          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+        </div>
+    </div>
+
+    <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">T&P — Proctored Test Platform</h3>
+          <div><span class="mono">2026</span><span class="status-badge completed">COMPLETED</span></div>
+        </div>
+        <div class="project-details">
+          <p style="color:var(--paper-dim);">Aptitude training platform with automated proctoring features.</p>
+          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+        </div>
+    </div>
+
+    <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">Connect Application</h3>
+          <div><span class="mono">2025</span><span class="status-badge completed">COMPLETED</span></div>
+        </div>
+        <div class="project-details">
+          <p style="color:var(--paper-dim);">Mentorship platform connecting students and alumni for guidance.</p>
+          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK EXPERIENCE -->
+<section id="work">
+  <div class="anim-hidden anim-header"><div class="eyebrow">Experience</div><h2>Work Experience</h2></div>
+  <div class="anim-hidden anim-experience" style="border-left: 2px solid var(--line); padding-left: 40px; position:relative;">
+    <div style="margin-bottom:20px;">
+      <div class="mono" style="color:var(--amber); font-size:13px; margin-bottom:5px;">MAR 2026 — PRESENT</div>
+      <h3 style="font-family:'Fraunces'; margin:0;">End-User Tester Intern</h3>
+      <p style="color:var(--cyan); font-weight:600;">The Context Lab</p>
+      <p style="color:var(--paper-dim);">Testing agent workflows on multi-agent orchestration and AI evaluation platforms.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="anim-hidden anim-header"><div class="eyebrow">Academic</div><h2>Certifications</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+    <div class="anim-hidden anim-cert" style="background:var(--panel); padding:30px; border-radius:8px; border:1px solid var(--line);">
+        <h4 style="margin:0 0 5px;">Web Scraping with Python</h4>
+        <p class="mono" style="color:var(--cyan); font-size:12px;">IBM</p>
+    </div>
+    <div class="anim-hidden anim-cert" style="background:var(--panel); padding:30px; border-radius:8px; border:1px solid var(--line);">
+        <h4 style="margin:0 0 5px;">Full Stack Web Development</h4>
+        <p class="mono" style="color:var(--cyan); font-size:12px;">Amazon EC2 — IBM</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contact">
+  <div class="anim-hidden anim-header"><div class="eyebrow">Availability</div><h2>Contacts</h2></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px;">
+    <div class="anim-hidden anim-contact">
+      <p class="mono" style="color:var(--amber); font-size: 11px; margin-bottom:15px">EMAIL</p>
+      <a href="mailto:karthikgroupdk@gmail.com" class="contact-text">karthikgroupdk@gmail.com</a>
+    </div>
+    <div class="anim-hidden anim-contact">
+      <p class="mono" style="color:var(--amber); font-size: 11px; margin-bottom:15px">PHONE</p>
+      <span class="contact-text">+91 95669 68593</span>
+    </div>
+    <div class="anim-hidden anim-contact">
+        <p class="mono" style="color:var(--amber); font-size: 11px; margin-bottom:15px">SOCIALS</p>
+        <div style="display:flex; gap:25px; font-size:26px;">
+            <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan)"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/karthik-dk13" style="color:var(--cyan)"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+  </div>
+</section>
+
+<script>
+  // --- SPACE BACKGROUND ENGINE ---
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let reverseStars = [];
+
+  function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  class Star {
+    constructor(isReverse = false) {
+      this.isReverse = isReverse;
+      this.reset();
+    }
+    reset() {
+      if (this.isReverse) {
+        // Start from bottom-right area
+        this.x = canvas.width + Math.random() * 200;
+        this.y = canvas.height + Math.random() * 200;
+        this.vx = - (4 + Math.random() * 6); // Move Left
+        this.vy = - (4 + Math.random() * 6); // Move Up
+      } else {
+        // Regular star: Start from top-left area
+        this.x = Math.random() * canvas.width - 200;
+        this.y = Math.random() * -500;
+        this.vx = 2 + Math.random() * 3; // Move Right
+        this.vy = 2 + Math.random() * 3; // Move Down
+      }
+      this.len = 20 + Math.random() * 40;
+      this.opacity = 0.1 + Math.random() * 0.5;
+    }
+    draw() {
+      ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x + (this.isReverse ? this.vx : -this.vx) * 3, this.y + (this.isReverse ? this.vy : -this.vy) * 3);
+      ctx.stroke();
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.y > canvas.height + 100 || this.x > canvas.width + 100 || this.x < -100 || this.y < -100) {
+        if (this.isReverse) return false; // Remove reverse stars once off-screen
+        this.reset();
+      }
+      return true;
+    }
+  }
+
+  // Create initial falling stars
+  for(let i=0; i<30; i++) stars.push(new Star());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => { s.update(); s.draw(); });
+    reverseStars = reverseStars.filter(s => {
+      let alive = s.update();
+      if (alive) s.draw();
+      return alive;
+    });
+    requestAnimationFrame(animate);
+  }
+
+  function launchReverseStar() {
+    for(let i=0; i<15; i++) reverseStars.push(new Star(true));
+  }
+
+  window.addEventListener('resize', initCanvas);
+  initCanvas();
+  animate();
+
+  // --- EXISTING TYPEWRITER ---
+  const lines = [
+    "> Initialize Karthik_Profile...",
+    "> Load Module: AI Systems & Java",
+    "> Status: Placement_Ready",
+    "> Connection: Online_"
+  ];
+  const el = document.getElementById('typewriter');
+  let l = 0, c = 0, txt = "";
+  function type() {
+    if (l < lines.length) {
+      if (c < lines[l].length) {
+        el.textContent = txt + lines[l].substring(0, c + 1);
+        c++; setTimeout(type, 30);
+      } else {
+        txt += lines[l] + "\n";
+        l++; c = 0; setTimeout(type, 500);
+      }
+    }
+  }
+  type();
+
+  // --- EXISTING SLOW SCROLL ANIMATIONS ---
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => { entry.target.classList.add('active'); }, idx * 150);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-hidden').forEach(el => observer.observe(el));
+
+  // --- EXISTING PROJECT EXPANSION ---
+  function expand(el) {
+    if(!el.classList.contains('expanded')) {
+      document.querySelectorAll('.project-card').forEach(c => c.classList.remove('expanded'));
+      el.classList.add('expanded');
+    }
+  }
+  function shrink(el) { el.classList.remove('expanded'); }
+</script>
+
+</body>
+</html>
