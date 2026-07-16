@@ -65,6 +65,51 @@
   .nav-links a { text-decoration: none; color: var(--paper-dim); font-size: 11px; transition: 0.3s; font-weight: 500; }
   .nav-links a:hover { color: var(--cyan); }
 
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    width: 38px;
+    height: 34px;
+    padding: 0;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--paper);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-links-mobile {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(11, 15, 20, 0.98);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .nav-links-mobile.open { max-height: 400px; }
+  .nav-links-mobile a {
+    text-decoration: none; color: var(--paper-dim); font-size: 13px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em;
+    padding: 16px 5vw; border-top: 1px solid var(--line);
+  }
+  .nav-links-mobile a:hover, .nav-links-mobile a:active { color: var(--cyan); }
+
   section { padding: 140px 8vw 100px; border-bottom: 1px solid var(--line); }
   h2 { font-family: 'Fraunces'; font-size: 48px; margin: 0 0 50px; }
 
@@ -107,6 +152,8 @@
 
   @media (max-width: 900px) {
     .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-links-mobile { display: flex; }
     #hero { flex-direction: column-reverse; padding-top: 100px; }
     .image-container { width: 110px; height: 150px; } 
     .name-block h1 { font-size: 70px; }
@@ -219,6 +266,19 @@
 <nav class="mono">
   <div style="font-weight: bold; letter-spacing: 2px;">KARTHIKEYAN P.</div>
   <div class="nav-links">
+    <a href="#hero">START</a>
+    <a href="./img/Karthikeyan_ATS_Arial_12pt">MY_CV</a>
+    <a href="./img/Dk_Karthik_cv.pdf">RESUME</a>
+    <a href="#education">EDUCATION</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#work">WORK EXPERIENCE</a>
+    <a href="#certs">CERTIFICATIONS</a>
+    <a href="#contact">CONTACTS</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links-mobile" id="navLinksMobile">
     <a href="#hero">START</a>
     <a href="Karthikeyan_ATS_Arial_12pt">MY_CV</a>
     <a href="Dk_Karthik_cv.pdf">RESUME</a>
@@ -596,6 +656,22 @@
         layer.classList.add('open');
         btn.setAttribute('aria-expanded','true');
       }
+    });
+  });
+
+  // --- MOBILE NAV TOGGLE ---
+  const navToggle = document.getElementById('navToggle');
+  const navLinksMobile = document.getElementById('navLinksMobile');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinksMobile.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navLinksMobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinksMobile.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
     });
   });
 </script>
