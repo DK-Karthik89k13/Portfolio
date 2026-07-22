@@ -145,6 +145,25 @@
   .project-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.6s var(--curve), opacity 0.4s ease; }
   .project-card.expanded .project-details { max-height: 1000px; opacity: 1; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--line); }
 
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 18px;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    transition: all 0.25s ease;
+  }
+  .demo-btn:hover {
+    background: var(--amber);
+    color: var(--ink-deep);
+  }
+
   .contact-text { font-size: 18px; display: block; text-decoration: none; color: inherit; }
   @media (min-width: 1200px) {
     .contact-text { font-size: 34px; font-weight: 600; }
@@ -390,6 +409,9 @@
         <div class="project-details">
           <p style="color:var(--paper-dim);">Aptitude training platform with automated proctoring features.</p>
           <a href="https://github.com/DK-Karthik89k13/PLA-TC/tree/main" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+          <a href="https://pla-tc.onrender.com" target="_blank" rel="noopener" class="demo-btn mono" onclick="event.stopPropagation();">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO
+          </a>
         </div>
     </div>
 
