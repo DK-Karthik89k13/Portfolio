@@ -116,7 +116,7 @@
   #hero, #contact { background: var(--ink-deep); }
 
   #hero { min-height: 90vh; display: flex; align-items: center; gap: 50px; }
-  .name-block h3 { font-family: 'Fraunces', serif; font-size: clamp(15px, 8vw, 100px); margin: 0; line-height: 0.8; }
+  .name-block h3 { font-family: ''; font-size: clamp(15px, 8vw, 100px); margin: 0; line-height: 0.8; }
   .name-block h3 span { color: var(--amber); }
 
   .boot-text {  
@@ -126,14 +126,11 @@
   }
 
   .image-container { 
-    width: 240px; height: 320px; border-radius: 12px; overflow: hidden; 
-    border: 2px solid var(--amber); flex-shrink: 0; position: relative; background: var(--panel);
+    width: 540px; height: 720px; border-radius: 12px; overflow: hidden; 
+    border: 5px solid var(--line); flex-shrink: 0; position: relative; background: var(--panel);
   }
   .image-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: 0.6s ease; }
-  .image-container img.img-back { z-index: 1; }
-  .image-container img.img-front { z-index: 2; opacity: 1; }
   @media (hover: hover) { .image-container:hover .img-front { opacity: 0; } }
-  .image-container.flipped .img-front { opacity: 0; }
 
   .project-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   .project-card { 
@@ -148,6 +145,25 @@
   .project-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.6s var(--curve), opacity 0.4s ease; }
   .project-card.expanded .project-details { max-height: 1000px; opacity: 1; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--line); }
 
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 18px;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    transition: all 0.25s ease;
+  }
+  .demo-btn:hover {
+    background: var(--amber);
+    color: var(--ink-deep);
+  }
+
   .contact-text { font-size: 18px; display: block; text-decoration: none; color: inherit; }
   @media (min-width: 1200px) {
     .contact-text { font-size: 34px; font-weight: 600; }
@@ -158,12 +174,11 @@
     .nav-toggle { display: flex; }
     .nav-links-mobile { display: flex; }
     #hero { flex-direction: column-reverse; padding-top: 100px; }
-    .image-container { width: 280px; height: 380px; } 
-    #hero .eyebrow, #hero .boot-text { display: none; }
+    .image-container { width: 220px; height: 300px; } 
     .name-block h1 { font-size: 70px; }
   }
 
-  /* --- EDUCATION STACK/ACCORDION --- */
+  /* --- EDUCATION STACK/ACCORDION (was missing) --- */
   .corner-mark{
     position: absolute;
     top: 24px;
@@ -271,7 +286,8 @@
   <div style="font-weight: bold; letter-spacing: 2px;">KARTHIKEYAN P.</div>
   <div class="nav-links">
     <a href="#hero">START</a>
-    <a href="./img/Dk_Karthik_cv.pdf">RESUME</a>
+    <a href="./img/Karthikeyan_ATS_Arial_12pt.pdf">MY_CV</a>
+    <a href="./img/Karthikeyan_Resume_2Column.pdf">RESUME</a>
     <a href="#education">EDUCATION</a>
     <a href="#projects">PROJECTS</a>
     <a href="#work">WORK EXPERIENCE</a>
@@ -283,7 +299,6 @@
   </button>
   <div class="nav-links-mobile" id="navLinksMobile">
     <a href="#hero">START</a>
-    <a href="./img/Dk_Karthik_cv.pdf">RESUME</a>
     <a href="#education">EDUCATION</a>
     <a href="#projects">PROJECTS</a>
     <a href="#work">WORK EXPERIENCE</a>
@@ -301,9 +316,9 @@
         >>> Aspiring Software Engineer with a strong foundation in AI/ML and full-stack development, gained through independent projects and a testing internship at an AI evaluation platform. Bringing a builder's mindset, strong fundamentals, and eagerness to learn to a team solving real-world problems.
     </p>
   </div>
-  <div class="image-container" id="profileImg">
-    <img src="./img/profile2.jpg" class="img-back">
-    <img src="./img/profile.jpg" class="img-front">
+  <div class="image-container">
+    <img src="./img/profile.jpg" class="img-back">
+    <img src="./img/profile2.jpg" class="img-front">
   </div>
 </section>
 
@@ -311,7 +326,7 @@
   <div class="corner-mark mono">FIG. 01 / RECORD</div>
   <div class="eyebrow">Education</div>
   <h2 style="margin-bottom:44px;">Academic record</h2>
- 
+
   <div class="stack">
     <div class="layer open" data-layer="edu-1">
       <button class="layer-head" aria-expanded="true">
@@ -352,7 +367,7 @@
 <section id="projects">
   <div class="anim-hidden anim-header"><div class="eyebrow">Project Modules</div><h2>Projects</h2></div>
   <div class="project-grid">
-    
+
     <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">KAI — AI Voice Assistant Agent</h3>
@@ -388,12 +403,15 @@
 
     <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">T&P — Proctored Test Platform</h3>
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">PL-TC — Proctored Test Platform</h3>
           <div><span class="mono">2026</span><span class="status-badge completed">COMPLETED</span></div>
         </div>
         <div class="project-details">
           <p style="color:var(--paper-dim);">Aptitude training platform with automated proctoring features.</p>
-          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+          <a href="https://github.com/DK-Karthik89k13/PLA-TC/tree/main" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
+          <a href="https://pla-tc.onrender.com" target="_blank" rel="noopener" class="demo-btn mono" onclick="event.stopPropagation();">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO
+          </a>
         </div>
     </div>
 
@@ -675,14 +693,6 @@
       navToggle.classList.remove('open');
       navToggle.setAttribute('aria-expanded', 'false');
     });
-  });
-
-  // --- PROFILE IMAGE: hover swaps on desktop (CSS handles that already).
-  // On mobile there's no hover, so a single tap swaps to profile2 instead.
-  const profileImg = document.getElementById('profileImg');
-  profileImg.addEventListener('touchend', (e) => {
-    e.stopPropagation(); // don't also trigger the starfield asteroid burst
-    profileImg.classList.toggle('flipped');
   });
 </script>
 
