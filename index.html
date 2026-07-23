@@ -2,43 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="msvalidate.01" content="B657233390C57B25B339F141D714FE00" />
-<title>
-Karthikeyan P | Software Developer Portfolio
-</title>
-<meta name="description" content="Karthikeyan P is a Software & Java Full Stack Developer skilled in Java, Spring Boot, React, MySQL, AI projects and Cloud technologies.">
-<meta name="author" content="Karthikeyan P">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="Karthikeyan P | Software Developer">
-<meta property="og:description" content="Software Developer portfolio showcasing Java, Spring Boot, React, AI projects and full-stack applications.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://karthikeyan-dk-p.vercel.app/">
-<meta property="og:image" content="https://github.com/DK-Karthik89k13/Portfolio/blob/main/img/profile.jpg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karthik P // Unit-13 Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"Person",
- "name":"Karthikeyan P",
- "jobTitle":"Software Developer",
- "url":"YOUR_VERCEL_URL",
- "sameAs":[
-   "https://github.com/DK-Karthik89k13",
-   "https://linkedin.com/in/karthik-dk13"
- ],
- "knowsAbout":[
-   "Java",
-   "Spring Boot",
-   "React",
-   "Artificial Intelligence",
-   "Full Stack Development"
- ]
-}
-</script>
 <style>
   :root{
     --ink: rgba(11, 15, 20, 0.9);
@@ -157,11 +126,14 @@ Karthikeyan P | Software Developer Portfolio
   }
 
   .image-container { 
-    width: 540px; height: 720px; border-radius: 12px; overflow: hidden; 
-    border: 5px solid var(--line); flex-shrink: 0; position: relative; background: var(--panel);
+    width: 240px; height: 320px; border-radius: 12px; overflow: hidden; 
+    border: 2px solid var(--amber); flex-shrink: 0; position: relative; background: var(--panel);
   }
   .image-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; transition: 0.6s ease; }
+  .image-container img.img-back { z-index: 1; }
+  .image-container img.img-front { z-index: 2; opacity: 1; }
   @media (hover: hover) { .image-container:hover .img-front { opacity: 0; } }
+  .image-container.flipped .img-front { opacity: 0; }
 
   .project-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   .project-card { 
@@ -176,25 +148,6 @@ Karthikeyan P | Software Developer Portfolio
   .project-details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.6s var(--curve), opacity 0.4s ease; }
   .project-card.expanded .project-details { max-height: 1000px; opacity: 1; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--line); }
 
-  .demo-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 10px 18px;
-    border: 1px solid var(--amber);
-    color: var(--amber);
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    transition: all 0.25s ease;
-  }
-  .demo-btn:hover {
-    background: var(--amber);
-    color: var(--ink-deep);
-  }
-
   .contact-text { font-size: 18px; display: block; text-decoration: none; color: inherit; }
   @media (min-width: 1200px) {
     .contact-text { font-size: 34px; font-weight: 600; }
@@ -205,7 +158,8 @@ Karthikeyan P | Software Developer Portfolio
     .nav-toggle { display: flex; }
     .nav-links-mobile { display: flex; }
     #hero { flex-direction: column-reverse; padding-top: 100px; }
-    .image-container { width: 220px; height: 300px; } 
+    .image-container { width: 280px; height: 380px; } 
+    #hero .eyebrow, #hero .boot-text { display: none; }
     .name-block h1 { font-size: 70px; }
   }
 
@@ -317,8 +271,8 @@ Karthikeyan P | Software Developer Portfolio
   <div style="font-weight: bold; letter-spacing: 2px;">KARTHIKEYAN P.</div>
   <div class="nav-links">
     <a href="#hero">START</a>
-    <a href="./img/Karthikeyan_ATS_Arial_12pt.pdf">MY_CV</a>
-    <a href="./img/Karthikeyan_Resume_2Column.pdf">RESUME</a>
+    <a href="./img/Karthikeyan_ATS_Arial_12pt">MY_CV</a>
+    <a href="./img/Dk_Karthik_cv.pdf">RESUME</a>
     <a href="#education">EDUCATION</a>
     <a href="#projects">PROJECTS</a>
     <a href="#work">WORK EXPERIENCE</a>
@@ -330,6 +284,8 @@ Karthikeyan P | Software Developer Portfolio
   </button>
   <div class="nav-links-mobile" id="navLinksMobile">
     <a href="#hero">START</a>
+    <a href="./img/Karthikeyan_ATS_Arial_12pt">MY_CV</a>
+    <a href="./img/Dk_Karthik_cv.pdf">RESUME</a>
     <a href="#education">EDUCATION</a>
     <a href="#projects">PROJECTS</a>
     <a href="#work">WORK EXPERIENCE</a>
@@ -347,9 +303,9 @@ Karthikeyan P | Software Developer Portfolio
         >>> Aspiring Software Engineer with a strong foundation in AI/ML and full-stack development, gained through independent projects and a testing internship at an AI evaluation platform. Bringing a builder's mindset, strong fundamentals, and eagerness to learn to a team solving real-world problems.
     </p>
   </div>
-  <div class="image-container">
-    <img src="./img/profile.jpg" class="img-back">
-    <img src="./img/profile2.jpg" class="img-front">
+  <div class="image-container" id="profileImg">
+    <img src="./img/profile2.jpeg" class="img-back">
+    <img src="./img/profile.png" class="img-front">
   </div>
 </section>
 
@@ -434,15 +390,12 @@ Karthikeyan P | Software Developer Portfolio
 
     <div class="project-card anim-hidden anim-project" onclick="expand(this)" ondblclick="shrink(this)">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">PL-TC — Proctored Test Platform</h3>
+          <h3 style="font-family:'Fraunces'; font-size:24px; margin:0;">T&P — Proctored Test Platform</h3>
           <div><span class="mono">2026</span><span class="status-badge completed">COMPLETED</span></div>
         </div>
         <div class="project-details">
           <p style="color:var(--paper-dim);">Aptitude training platform with automated proctoring features.</p>
-          <a href="https://github.com/DK-Karthik89k13/PLA-TC/tree/main" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
-          <a href="https://pla-tc.onrender.com" target="_blank" rel="noopener" class="demo-btn mono" onclick="event.stopPropagation();">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> LIVE DEMO
-          </a>
+          <a href="https://github.com/DK-Karthik89k13" style="color:var(--cyan); text-decoration:none;" class="mono">[ VIEW GITHUB ]</a>
         </div>
     </div>
 
@@ -724,6 +677,14 @@ Karthikeyan P | Software Developer Portfolio
       navToggle.classList.remove('open');
       navToggle.setAttribute('aria-expanded', 'false');
     });
+  });
+
+  // --- PROFILE IMAGE: hover swaps on desktop (CSS handles that already).
+  // On mobile there's no hover, so a single tap swaps to profile2 instead.
+  const profileImg = document.getElementById('profileImg');
+  profileImg.addEventListener('touchend', (e) => {
+    e.stopPropagation(); // don't also trigger the starfield asteroid burst
+    profileImg.classList.toggle('flipped');
   });
 </script>
 
